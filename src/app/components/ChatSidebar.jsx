@@ -14,7 +14,7 @@ function ChatSidebar({ chats, selectedChat, onChatSelect, isOpen, onClose }) {
       {isOpen && <div className="sidebar-overlay" onClick={onClose}></div>}
       <div className={`chat-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h1>Chats</h1>
+          <h1>XaiChat</h1>
           <button className="menu-button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
