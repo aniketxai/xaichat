@@ -10,7 +10,7 @@ import axios from 'axios'
 
 function Home() {
   const [selectedChat, setSelectedChat] = useState(null)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [userDetails, setUserDetails] = useState(null)
   const [allUsers, setAllUsers] = useState([])
   const [message, setMessage] = useState([])
