@@ -25,7 +25,7 @@ try {
 
     //create new user
     const newUser = new User({
-        username,
+        name: username,
         email,
         password: hashedPassword
     })

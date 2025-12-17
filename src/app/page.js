@@ -48,7 +48,7 @@ useEffect(() => {
 const chats = (allUsers && allUsers.length)
   ? allUsers.map((u) => ({
       id: u._id,
-      name: u.username || u.email,
+      name: u.name || u.email,
       avatar: '👤',
       lastMessage: 'Awesome! See you then!',
       time: '09:19 AM',
