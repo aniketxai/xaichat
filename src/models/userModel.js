@@ -2,7 +2,7 @@ import { verify } from "jsonwebtoken";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  username: {
+  name: {
     type: String,
     required: true,
     unique: true
@@ -21,6 +21,22 @@ const userSchema = new mongoose.Schema({
   },
   verifyTokenExpiry: {
     type: Date
+  },
+  avatar: {
+    type: String
+  },
+  lastMessage: {
+    type: String
+  },
+  time: {
+    type: String
+  },
+  online: {
+    type: Boolean,
+    default: false            
+  },
+  lastSeen: {
+    type: String
   }
 });
 

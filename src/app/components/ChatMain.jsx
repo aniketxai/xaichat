@@ -3,7 +3,7 @@ import { useState } from 'react'
 import MessageBubble from './MessageBubble'
 import MessageInput from './MessageInput'
 
-function ChatMain({ selectedChat, messages, onMenuClick }) {
+function ChatMain({ selectedChat, messages, onMenuClick,senderid }) {
   if (!selectedChat) {
     return (
       <div className="chat-main">
@@ -61,7 +61,7 @@ function ChatMain({ selectedChat, messages, onMenuClick }) {
         ))}
       </div>
 
-      <MessageInput />
+      <MessageInput senderid={senderid} reciverid={selectedChat.id} />
     </div>
   )
 }

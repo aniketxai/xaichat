@@ -1,12 +1,28 @@
 "use client"
 import { useState } from 'react'
+import axios from 'axios'
 
-function MessageInput() {
+function MessageInput({senderid,reciverid}) {
   const [message, setMessage] = useState('')
+
 
   const handleSend = () => {
     if (message.trim()) {
       console.log('Sending message:', message)
+      // API call to send message
+      axios.post('/api/users/msg', {
+        senderId: senderid,
+        receiverId: reciverid,
+        text: message
+      })
+      .then((response) => {
+        console.log('Message sent successfully:', response.data)
+      })
+      .catch((error) => {
+        console.error('Error sending message:', error)
+      })
+
+      // Clear input field
       setMessage('')
     }
   }
