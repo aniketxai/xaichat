@@ -2,7 +2,10 @@
 import { useState } from 'react';
 import './Login.css';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
 function Login() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
@@ -19,6 +22,14 @@ function Login() {
       const response = axios.post(isLogin ? '/api/users/login' : '/api/users/signup', formData)
       
         console.log('Signup Sucess', response.data);
+        setFormData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          username: ''
+        });
+        
+        router.push('/');
     
 
       
