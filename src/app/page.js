@@ -1,12 +1,35 @@
 "use client"
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import './components/Style.css'
 import ChatSidebar from './components/ChatSidebar'
 import ChatMain from './components/ChatMain'
+import axios from 'axios'
+
 
 function Home() {
   const [selectedChat, setSelectedChat] = useState(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [userDetails, setUserDetails] = useState(null)
+
+
+//Get user Details from API
+const getUserDetails = async () => {
+const response = await axios.get('/api/users/info')
+console.log(response.data.user)
+setUserDetails(response.data.user)
+console.log("User", userDetails)
+}
+
+
+
+useEffect(() => {
+  getUserDetails()
+}, [])
+
+
+
+
+
 
   const chats = [
     {
