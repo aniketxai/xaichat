@@ -6,12 +6,15 @@ import ChatMain from './components/ChatMain'
 import axios from 'axios'
 
 
+
+
 function Home() {
   const [selectedChat, setSelectedChat] = useState(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [userDetails, setUserDetails] = useState(null)
   const [allUsers, setAllUsers] = useState([])
   const [message, setMessage] = useState([])
+  
 
 
 //Get user Details from API
@@ -44,6 +47,8 @@ useEffect(() => {
   getAllUsers()
 }, [])
 
+
+
 // derive chats list from allUsers for the sidebar
 const chats = (allUsers && allUsers.length)
   ? allUsers.map((u) => ({
@@ -64,8 +69,7 @@ const chats = (allUsers && allUsers.length)
     type: msg.senderId === userDetails._id ? 'sent' : 'received',
     content: msg.text,
     time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    isVoice: false,
-    reactions: ['❤️']
+    isVoice: false
   })) : []
 
 
@@ -151,14 +155,25 @@ const chats = (allUsers && allUsers.length)
 
 
 
-  
+  useEffect(() => {
+  if (!selectedChat?.id) return;
+
+  getMessages(selectedChat.id); // initial load
+
+  const interval = setInterval(() => {
+    getMessages(selectedChat.id);
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, [selectedChat?.id]);
+
 
 
   const handleChatSelect = (chat) => {
     setSelectedChat(chat)
     setIsSidebarOpen(false)
     console.log(selectedChat)
-    getMessages(chat.id)
+    // getMessages(chat.id)
   }
 
   return (

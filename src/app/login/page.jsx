@@ -19,7 +19,7 @@ function Login() {
     console.log('Form submitted:', formData);
     //API call
     try {
-      const response = axios.post(isLogin ? '/api/users/login' : '/api/users/signup', formData)
+      const response = await axios.post(isLogin ? '/api/users/login' : '/api/users/signup', formData)
       
         console.log('Signup Sucess', response.data);
         setFormData({
@@ -30,6 +30,7 @@ function Login() {
         });
         
         router.push('/');
+  
     
 
       

@@ -1,11 +1,15 @@
 "use client"
-import { useState } from 'react'
+import { useState ,useRef,useEffect} from 'react'
 import MessageBubble from './MessageBubble'
 import MessageInput from './MessageInput'
 import axios from 'axios'
 
 function ChatMain({ selectedChat, messages, onMenuClick,senderid }) {
 
+const bottomRef = useRef(null);
+useEffect(() => {
+  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [messages.length]);
 
 
 
@@ -65,6 +69,7 @@ function ChatMain({ selectedChat, messages, onMenuClick,senderid }) {
         {messages.map((message, index) => (
           <MessageBubble key={message.id} message={message} />
         ))}
+        <div ref={bottomRef} />
       </div>
 
       <MessageInput senderid={senderid} reciverid={selectedChat.id} />
