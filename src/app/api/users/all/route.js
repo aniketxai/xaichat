@@ -11,8 +11,11 @@ connectDB();
 export async function GET(request) {
     try {
         const userId = getDataToken(request);
-        //Load all users except the current user
+
+        // fetch all users except the requesting user
         const users = await User.find({_id: { $ne: userId }}).select('-password');
+        
+
         return NextResponse.json({users}, {status: 200});
     } catch (error) {
         return NextResponse.json({error: error.message}, {status: 500});
