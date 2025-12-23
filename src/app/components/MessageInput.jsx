@@ -10,11 +10,11 @@ function MessageInput({senderid,reciverid}) {
     if (message.trim()) {
       console.log('Sending message:', message)
       // API call to send message
-      axios.post('/api/users/msg', {
+      axios.post('http://localhost:3000/api/msg/send', {
         senderId: senderid,
         receiverId: reciverid,
         text: message
-      })
+      }, { withCredentials: true })
       .then((response) => {
         console.log('Message sent successfully:', response.data)
       })
