@@ -14,7 +14,7 @@ function MessageInput({senderid,reciverid}) {
         senderId: senderid,
         receiverId: reciverid,
         text: message
-      }, { withCredentials: true })
+      })
       .then((response) => {
         console.log('Message sent successfully:', response.data)
       })
