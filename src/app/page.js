@@ -35,7 +35,9 @@ const getAllUsers = async () => {
 
 //API to Get messages between logged in user and selected user
   const getMessages = async (receiverId) => {
-    const response = await axios.get(`http://localhost:3000/api/msg/${receiverId}`)
+    const response = await axios.get(`http://localhost:3000/api/msg/${receiverId}`,{
+      withCredentials: true
+    })
     console.log("Messages", response.data)
     setMessage(response.data)
 
