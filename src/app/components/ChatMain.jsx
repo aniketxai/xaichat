@@ -4,12 +4,23 @@ import MessageBubble from './MessageBubble'
 import MessageInput from './MessageInput'
 import axios from 'axios'
 
-function ChatMain({ selectedChat, messages, onMenuClick,senderid }) {
+function ChatMain({ selectedChat, messages, onMenuClick,senderid,socket }) {
+  const [inputMessage, setInputMessage] = useState('')
 
 const bottomRef = useRef(null);
 useEffect(() => {
   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 }, [messages.length]);
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -25,6 +36,20 @@ useEffect(() => {
       </div>
     )
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className="chat-main">
@@ -72,7 +97,7 @@ useEffect(() => {
         <div ref={bottomRef} />
       </div>
 
-      <MessageInput senderid={senderid} reciverid={selectedChat.id} />
+      <MessageInput senderid={senderid} reciverid={selectedChat.id} socket={socket} inputMessage={inputMessage} setInputMessage={setInputMessage} />
     </div>
   )
 }

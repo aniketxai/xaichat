@@ -170,26 +170,49 @@ function Home() {
     setIsSidebarOpen(false)
     getMessages(chat.id)
 
+    // Disconnect old socket if exists
+    if (socket) {
+      socket.off('newMessage');
+      socket.disconnect();
+    }
 
-    //connect to socket 
-    const socket = io("http://localhost:3000", {
+    //connect to new socket 
+    const newSocket = io("http://localhost:3000", {
       query: { userId: userDetails._id }
     })
-    socket.connect();
-    setSocket(socket)
+    newSocket.connect();
+    setSocket(newSocket)
 
-    socket.on("getOnlineUsers", (userId) => {
+    newSocket.on("getOnlineUsers", (userId) => {
       console.log("Online Users:", userId);
       setOnlineUsers(userId)
     })
 
-
-
-
-
-
-
-
+    // Listen for incoming messages
+    newSocket.on('newMessage', (newMessage) => {
+      console.log('New message received:', newMessage);
+      // Generate unique ID if not present (for real-time socket messages)
+      if (!newMessage._id) {
+        newMessage._id = `temp_${Date.now()}_${Math.random()}`;
+      }
+      
+      // Prevent duplicate messages - check if message already exists
+      setMessage((prev) => {
+        const messageExists = prev.some(
+          (msg) => msg._id === newMessage._id || 
+          (msg.text === newMessage.text && 
+           msg.senderId === newMessage.senderId && 
+           Math.abs(new Date(msg.createdAt) - new Date(newMessage.createdAt)) < 1000)
+        );
+        
+        if (messageExists) {
+          console.log('Duplicate message ignored');
+          return prev;
+        }
+        
+        return [...prev, newMessage];
+      });
+    });
   }
 
   const onMenu = (chat) => {
@@ -197,10 +220,10 @@ function Home() {
     console.log("Deselecting chat")
     //Disconnect socket
     if (socket) {
+      socket.off('newMessage');
       socket.disconnect();
       console.log("Socket disconnected")
     }
-
   }
 
 
@@ -217,6 +240,7 @@ function Home() {
       <ChatMain
         selectedChat={selectedChat}
         messages={messages}
+        socket={socket}
 
         senderid={userDetails ? userDetails._id : null}
         onMenuClick={onMenu}

@@ -1,29 +1,44 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-function MessageInput({senderid,reciverid}) {
-  const [message, setMessage] = useState('')
+function MessageInput({senderid,reciverid,socket,inputMessage = '',setInputMessage = () => {}}) {
+
+
+  
+
+  
+
+  
 
 
   const handleSend = () => {
-    if (message.trim()) {
-      console.log('Sending message:', message)
+    if (inputMessage.trim()) {
+      console.log('Sending message:', inputMessage)
       // API call to send message
       axios.post('http://localhost:3000/api/msg/send', {
         senderId: senderid,
         receiverId: reciverid,
-        text: message
+        text: inputMessage
       })
       .then((response) => {
         console.log('Message sent successfully:', response.data)
+        // Emit message through socket so receiver sees it immediately
+        if (socket) {
+          socket.emit('sendMessage', {
+            senderId: senderid,
+            receiverId: reciverid,
+            text: inputMessage,
+            createdAt: new Date()
+          })
+        }
       })
       .catch((error) => {
         console.error('Error sending message:', error)
       })
 
       // Clear input field
-      setMessage('')
+      setInputMessage('')
     }
   }
 
@@ -33,6 +48,9 @@ function MessageInput({senderid,reciverid}) {
       handleSend()
     }
   }
+
+
+
 
   return (
     <div className="message-input-container">
@@ -47,8 +65,8 @@ function MessageInput({senderid,reciverid}) {
         <input
           type="text"
           placeholder="Enter your message here"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}
           className="message-input"
         />
@@ -76,7 +94,7 @@ function MessageInput({senderid,reciverid}) {
         <button
           className="send-button"
           onClick={handleSend}
-          disabled={!message.trim()}
+          disabled={!inputMessage.trim()}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
