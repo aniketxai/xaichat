@@ -4,7 +4,7 @@ import './components/Style.css'
 import ChatSidebar from './components/ChatSidebar'
 import ChatMain from './components/ChatMain'
 import axios from 'axios'
-
+import io from 'socket.io-client'
 
 
 
@@ -14,6 +14,9 @@ function Home() {
   const [userDetails, setUserDetails] = useState(null)
   const [allUsers, setAllUsers] = useState([])
   const [message, setMessage] = useState([])
+
+
+ 
   
 
 
@@ -157,26 +160,37 @@ const chats = (allUsers && allUsers.length)
 
 
 
-  useEffect(() => {
-  if (!selectedChat?.id) return;
-
-  getMessages(selectedChat.id); // initial load
-
-  const interval = setInterval(() => {
-    getMessages(selectedChat.id);
-  }, 3000);
-
-  return () => clearInterval(interval);
-}, [selectedChat?.id]);
-
+  
 
 
   const handleChatSelect = (chat) => {
     setSelectedChat(chat)
     setIsSidebarOpen(false)
     console.log(selectedChat)
-    // getMessages(chat.id)
+
+ //connect to socket 
+  const socket = io("http://localhost:3000")  
+  socket.connect();
+  console.log("Socket", socket)
+
+
+
+
+     getMessages(chat.id)
+
   }
+
+const onMenu = (chat) => {
+  setIsSidebarOpen(true)
+  console.log("Deselecting chat")
+  //Disconnect socket
+  const socket = io("http://localhost:3000")  
+  socket.disconnect();  
+  console.log("Socket", socket)
+
+}
+
+  
 
   return (
     <div className="chat-app">
@@ -190,8 +204,9 @@ const chats = (allUsers && allUsers.length)
       <ChatMain
         selectedChat={selectedChat}
         messages={messages}
+     
         senderid={userDetails ? userDetails._id : null}
-        onMenuClick={() => setIsSidebarOpen(true)}
+        onMenuClick={onMenu}
       />
     </div>
   )
