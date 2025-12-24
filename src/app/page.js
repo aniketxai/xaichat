@@ -1,5 +1,5 @@
 "use client"
-import { useState ,useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import './components/Style.css'
 import ChatSidebar from './components/ChatSidebar'
 import ChatMain from './components/ChatMain'
@@ -15,31 +15,32 @@ function Home() {
   const [allUsers, setAllUsers] = useState([])
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState(null)
+  const [onlineUsers, setOnlineUsers] = useState(null)
 
 
- 
-  
 
 
-//Get user Details from API
-const getUserDetails = async () => {
-const response = await axios.get('/api/users/info')
-console.log(response.data.user)
-setUserDetails(response.data.user)
-console.log("User", userDetails)
-}
 
-//Get all users on component mount
-const getAllUsers = async () => {
-  const response = await axios.get('/api/users/all')
-  console.log("All users", response.data.users)
-  setAllUsers(response.data.users)
-  console.log("All Users State", allUsers)
-}
 
-//API to Get messages between logged in user and selected user
+  //Get user Details from API
+  const getUserDetails = async () => {
+    const response = await axios.get('/api/users/info')
+    console.log(response.data.user)
+    setUserDetails(response.data.user)
+    console.log("User", userDetails)
+  }
+
+  //Get all users on component mount
+  const getAllUsers = async () => {
+    const response = await axios.get('/api/users/all')
+    console.log("All users", response.data.users)
+    setAllUsers(response.data.users)
+    console.log("All Users State", allUsers)
+  }
+
+  //API to Get messages between logged in user and selected user
   const getMessages = async (receiverId) => {
-    const response = await axios.get(`http://localhost:3000/api/msg/${receiverId}`,{
+    const response = await axios.get(`http://localhost:3000/api/msg/${receiverId}`, {
       withCredentials: true
     })
     console.log("Messages", response.data)
@@ -48,29 +49,29 @@ const getAllUsers = async () => {
   }
 
 
-useEffect(() => {
-  getUserDetails()
-  getAllUsers()
-}, [])
+  useEffect(() => {
+    getUserDetails()
+    getAllUsers()
+  }, [])
 
 
 
-// derive chats list from allUsers for the sidebar
-const chats = (allUsers && allUsers.length)
-  ? allUsers.map((u) => ({
+  // derive chats list from allUsers for the sidebar
+  const chats = (allUsers && allUsers.length)
+    ? allUsers.map((u) => ({
       id: u._id,
       name: u.name || u.email,
       avatar: '👤',
-      lastMessage: 'Awesome! See you then!',
+      lastMessage: 'Awesome!',
       time: '09:19 AM',
       online: !!u.online,
       lastSeen: 'Last seen 19 Nov at 01:08 PM'
     }))
-  : []
+    : []
 
 
-//derive messages for the selected chat
-    const messages = selectedChat ? message.map((msg) => ({
+  //derive messages for the selected chat
+  const messages = selectedChat ? message.map((msg) => ({
     id: msg._id,
     type: msg.senderId === userDetails._id ? 'sent' : 'received',
     content: msg.text,
@@ -108,7 +109,7 @@ const chats = (allUsers && allUsers.length)
   //   }
   // ]
 
-  
+
   // const messages = selectedChat ? [
   //  {
   //   id: 1,
@@ -161,41 +162,48 @@ const chats = (allUsers && allUsers.length)
 
 
 
-  
+
 
 
   const handleChatSelect = (chat) => {
     setSelectedChat(chat)
     setIsSidebarOpen(false)
-    console.log(selectedChat)
-
- //connect to socket 
-  const socket = io("http://localhost:3000")  
-  socket.connect();
-  setSocket(socket)
-  
-
-  console.log("Socket", socket)
+    getMessages(chat.id)
 
 
+    //connect to socket 
+    const socket = io("http://localhost:3000", {
+      query: { userId: userDetails._id }
+    })
+    socket.connect();
+    setSocket(socket)
+
+    socket.on("getOnlineUsers", (userId) => {
+      console.log("Online Users:", userId);
+      setOnlineUsers(userId)
+    })
 
 
-     getMessages(chat.id)
+
+
+
+
+
 
   }
 
-const onMenu = (chat) => {
-  setIsSidebarOpen(true)
-  console.log("Deselecting chat")
-  //Disconnect socket
-  if (socket) {
-    socket.disconnect();
-    console.log("Socket disconnected")
+  const onMenu = (chat) => {
+    setIsSidebarOpen(true)
+    console.log("Deselecting chat")
+    //Disconnect socket
+    if (socket) {
+      socket.disconnect();
+      console.log("Socket disconnected")
+    }
+
   }
 
-}
 
-  
 
   return (
     <div className="chat-app">
@@ -209,7 +217,7 @@ const onMenu = (chat) => {
       <ChatMain
         selectedChat={selectedChat}
         messages={messages}
-     
+
         senderid={userDetails ? userDetails._id : null}
         onMenuClick={onMenu}
       />
