@@ -14,6 +14,7 @@ function Home() {
   const [userDetails, setUserDetails] = useState(null)
   const [allUsers, setAllUsers] = useState([])
   const [message, setMessage] = useState([])
+  const [socket, setSocket] = useState(null)
 
 
  
@@ -171,6 +172,9 @@ const chats = (allUsers && allUsers.length)
  //connect to socket 
   const socket = io("http://localhost:3000")  
   socket.connect();
+  setSocket(socket)
+  
+
   console.log("Socket", socket)
 
 
@@ -184,9 +188,10 @@ const onMenu = (chat) => {
   setIsSidebarOpen(true)
   console.log("Deselecting chat")
   //Disconnect socket
-  const socket = io("http://localhost:3000")  
-  socket.disconnect();  
-  console.log("Socket", socket)
+  if (socket) {
+    socket.disconnect();
+    console.log("Socket disconnected")
+  }
 
 }
 
