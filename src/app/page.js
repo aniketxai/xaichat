@@ -177,7 +177,7 @@ function Home() {
     }
 
     //connect to new socket 
-    const newSocket = io("http://localhost:3000", {
+    const newSocket = io(process.env.BACKEND_URL, {
       query: { userId: userDetails._id }
     })
     newSocket.connect();

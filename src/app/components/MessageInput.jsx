@@ -16,7 +16,7 @@ function MessageInput({senderid,reciverid,socket,inputMessage = '',setInputMessa
     if (inputMessage.trim()) {
       console.log('Sending message:', inputMessage)
       // API call to send message
-      axios.post('http://localhost:3000/api/msg/send', {
+      axios.post(`${process.env.BACKEND_URL}/api/msg/send`, {
         senderId: senderid,
         receiverId: reciverid,
         text: inputMessage
