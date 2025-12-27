@@ -140,7 +140,7 @@ function Login() {
           </button>
         </form>
 
-        <div className="divider">
+        {/* <div className="divider">
           <span>OR</span>
         </div>
 
@@ -154,7 +154,7 @@ function Login() {
             </svg>
             Continue with Google
           </button>
-        </div>
+        </div> */}
 
         <div className="toggle-mode">
           <p>

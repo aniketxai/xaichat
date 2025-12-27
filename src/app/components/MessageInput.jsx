@@ -1,15 +1,7 @@
 "use client"
-import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 function MessageInput({senderid,reciverid,socket,inputMessage = '',setInputMessage = () => {}}) {
-
-
-  
-
-  
-
-  
 
 
   const handleSend = () => {
