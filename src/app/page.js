@@ -180,7 +180,7 @@ function Home() {
     }
 
     //connect to new socket 
-    const newSocket = io(process.env.BACKEND_URL, {
+    const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_URL, {
       query: { userId: userDetails._id }
     })
     newSocket.connect();

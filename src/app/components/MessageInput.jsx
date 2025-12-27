@@ -12,7 +12,7 @@ function MessageInput({senderid,reciverid,socket,inputMessage = '',setInputMessa
 
       
       // API call to send message
-      axios.post(`${process.env.BACKEND_URL}/api/msg/send`, {
+      axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/msg/send`, {
         senderId: senderid,
         receiverId: reciverid,
         text: inputMessage
