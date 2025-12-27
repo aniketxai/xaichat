@@ -30,6 +30,9 @@ function Home() {
     console.log("User", userDetails)
   }
 
+
+  
+
   //Get all users on component mount
   const getAllUsers = async () => {
     const response = await axios.get('/api/users/all')
